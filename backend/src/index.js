@@ -1,19 +1,30 @@
 import express from "express";
 import cors from "cors";
-import reviewsRouter from "./routes/reviews.js";
+import reviewsRoutes from "./routes/reviews.js";
 
 const app = express();
 
-app.use(cors({
-  origin: "*",
-}));
+
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "http://localhost:3000",
+      "https://fynd-ai-intern-assignment-bay.vercel.app"
+    ],
+    methods: ["GET", "POST"],
+    allowedHeaders: ["Content-Type"]
+  })
+);
 
 app.use(express.json());
 
-app.use("/api/reviews", reviewsRouter);
+// routes
+app.use("/api/reviews", reviewsRoutes);
 
-app.get("/health", (req, res) => {
-  res.json({ status: "ok" });
+// health check
+app.get("/", (req, res) => {
+  res.send("Backend is running");
 });
 
 const PORT = process.env.PORT || 3001;
